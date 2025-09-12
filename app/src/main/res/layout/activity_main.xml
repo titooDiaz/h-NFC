@@ -1,14 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context=".MainActivity">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    android:background="#FFFFFF">
 
     <Button
-        android:id="@+id/btnToggleFlash"
-        android:layout_width="wrap_content"
+        android:id="@+id/btnWriteFlashOn"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Toggle Flashlight" />
+        android:text="Write: Flash ON" />
+
+    <Button
+        android:id="@+id/btnWriteFlashOff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Write: Flash OFF"
+        android:layout_marginTop="12dp" />
+
+    <Button
+        android:id="@+id/btnWriteUrl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Write: Open URL"
+        android:layout_marginTop="12dp" />
+
+    <Button
+        android:id="@+id/btnClear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Clear Tag"
+        android:layout_marginTop="12dp" />
+
+
 </LinearLayout>
