@@ -12,29 +12,37 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NFCApp"
         tools:targetApi="31">
+
+        <!-- Main Activity solo para abrir la app manualmente -->
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
             android:exported="true">
 
+            <!-- Solo el intent normal de launcher -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-            <!-- Filter NFC -->
-            <intent-filter>
-                <action android:name="android.nfc.action.TECH_DISCOVERED" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-            <meta-data
-                android:name="android.nfc.tech"
-                android:resource="@xml/nfc_tech_filter" />
         </activity>
 
+        <receiver
+            android:name=".NfcReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.nfc.action.TAG_DISCOVERED" />
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <action android:name="android.nfc.action.TECH_DISCOVERED" />
+            </intent-filter>
+        </receiver>
 
 
-</application>
+        <service
+            android:name=".NfcService"
+            android:exported="true"
+            android:foregroundServiceType="connectedDevice" />
+
+    </application>
 
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.CAMERA" />

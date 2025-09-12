@@ -22,23 +22,28 @@ class MainActivity : ComponentActivity() {
     private var dataToWrite: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Initialize NFC adapter
         nfcAdapter = NfcAdapter.getDefaultAdapter(this)
 
+        // Button to write "FLASH_ON"
         findViewById<Button>(R.id.btnWriteFlashOn).setOnClickListener {
             mode = "WRITE"
             dataToWrite = "FLASH_ON"
             Toast.makeText(this, "Tap an NFC tag to write FLASH_ON", Toast.LENGTH_SHORT).show()
         }
 
+        // Button to write "FLASH_OFF"
         findViewById<Button>(R.id.btnWriteFlashOff).setOnClickListener {
             mode = "WRITE"
             dataToWrite = "FLASH_OFF"
             Toast.makeText(this, "Tap an NFC tag to write FLASH_OFF", Toast.LENGTH_SHORT).show()
         }
 
+        // Button to write a URL
         findViewById<Button>(R.id.btnWriteUrl).setOnClickListener {
             mode = "WRITE"
             dataToWrite = "https://google.com"
@@ -48,17 +53,43 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
+
+        // Pending intent to capture NFC intents while the app is in the foreground
         val intent = Intent(this, javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_MUTABLE)
-        val filters = arrayOf(IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED))
-        nfcAdapter?.enableForegroundDispatch(this, pendingIntent, filters, null)
+
+        // Filters for NFC intents
+        val ndef = IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED).apply {
+            addCategory(Intent.CATEGORY_DEFAULT)
+            try {
+                addDataType("*/*") // Accepts any MIME type
+            } catch (e: IntentFilter.MalformedMimeTypeException) {
+                throw RuntimeException("Failed to add MIME type", e)
+            }
+        }
+
+        val tech = IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED).apply {
+            addCategory(Intent.CATEGORY_DEFAULT)
+        }
+
+        val tag = IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED).apply {
+            addCategory(Intent.CATEGORY_DEFAULT)
+        }
+
+        val filters = arrayOf(ndef, tech, tag)
+        val techList = arrayOf(arrayOf(Ndef::class.java.name))
+
+        // Enable foreground dispatch to capture NFC intents
+        nfcAdapter?.enableForegroundDispatch(this, pendingIntent, filters, techList)
     }
 
     override fun onPause() {
         super.onPause()
+        // Disable foreground dispatch when activity is paused
         nfcAdapter?.disableForegroundDispatch(this)
     }
 
+    // Toggle flashlight ON or OFF
     private fun turnFlash(enable: Boolean) {
         val cameraManager = getSystemService<CameraManager>()
         val cameraId = cameraManager?.cameraIdList?.first()
@@ -67,6 +98,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    // Open URL in default browser
     private fun openUrl(url: String) {
         val browserIntent = Intent(Intent.ACTION_VIEW, android.net.Uri.parse(url))
         startActivity(browserIntent)
@@ -75,11 +107,11 @@ class MainActivity : ComponentActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
 
-        // 🔎 Log para depuración
+        // Debug log
         Log.d("NFC", "onNewIntent called! action=${intent.action}")
         Toast.makeText(this, "📡 NFC intent: ${intent.action}", Toast.LENGTH_SHORT).show()
 
-        // ✅ Asegúrate de que realmente es un intent de NFC
+        // Make sure it's really an NFC intent
         if (intent.action == NfcAdapter.ACTION_TAG_DISCOVERED ||
             intent.action == NfcAdapter.ACTION_NDEF_DISCOVERED ||
             intent.action == NfcAdapter.ACTION_TECH_DISCOVERED) {
@@ -93,6 +125,7 @@ class MainActivity : ComponentActivity() {
 
             Log.d("NFC", "Tag detected: $tag")
 
+            // Check if tag is NDEF-capable
             val ndef = Ndef.get(tag)
             if (ndef != null) {
                 ndef.connect()
@@ -129,6 +162,7 @@ class MainActivity : ComponentActivity() {
                 Toast.makeText(this, "📖 Read: $data", Toast.LENGTH_LONG).show()
                 Log.d("NFC", "Read from tag: $data")
 
+                // Act based on the content
                 when (data.uppercase()) {
                     "FLASH_ON" -> turnFlash(true)
                     "FLASH_OFF" -> turnFlash(false)
