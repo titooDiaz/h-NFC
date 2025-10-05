@@ -49,6 +49,48 @@ class MainActivity : ComponentActivity() {
             dataToWrite = "https://google.com"
             Toast.makeText(this, "Tap an NFC tag to write URL", Toast.LENGTH_SHORT).show()
         }
+
+        // Handle NFC intent if the app was launched by NFC
+        handleNfcIntent(intent)
+    }
+
+    private fun handleNfcIntent(intent: Intent?) {
+        if (intent == null) return
+
+        // Check for data passed by NfcDispatcherActivity
+        val directData = intent.getStringExtra("nfc_data")
+        if (directData != null) {
+            Log.d("NFC", "App launched with NFC data: $directData")
+            actOnNfcData(directData)
+            return
+        }
+
+        // Normal NFC system intents
+        if (intent.action == NfcAdapter.ACTION_TAG_DISCOVERED ||
+            intent.action == NfcAdapter.ACTION_NDEF_DISCOVERED ||
+            intent.action == NfcAdapter.ACTION_TECH_DISCOVERED) {
+
+            val rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)
+            val messages = rawMsgs?.map { it as NdefMessage }?.toTypedArray()
+            val data = messages?.firstOrNull()?.let { NfcUtils.readFromMessage(it) }
+
+            if (data != null) {
+                actOnNfcData(data)
+            } else {
+                Log.d("NFC", "No NDEF messages found in tag")
+            }
+        }
+    }
+
+    private fun actOnNfcData(data: String) {
+        Log.d("NFC", "Executing NFC action: $data")
+        Toast.makeText(this, "NFC Action: $data", Toast.LENGTH_SHORT).show()
+
+        when (data.uppercase()) {
+            "FLASH_ON" -> turnFlash(true)
+            "FLASH_OFF" -> turnFlash(false)
+            else -> if (data.startsWith("http")) openUrl(data)
+        }
     }
 
     override fun onResume() {
@@ -106,6 +148,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
+        handleNfcIntent(intent)
 
         // Debug log
         Log.d("NFC", "onNewIntent called! action=${intent.action}")
