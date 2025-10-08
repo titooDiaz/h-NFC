@@ -2,23 +2,35 @@ package com.example.nfcapp
 
 import android.content.Context
 import android.content.Intent
+import android.hardware.camera2.CameraManager
 import android.net.Uri
 import android.util.Log
+import androidx.core.content.getSystemService
 
 object ActionExecutor {
+
     fun openUrl(context: Context, url: String) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        context.startActivity(intent)
+        try {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            context.startActivity(intent)
+            Log.d("NFC", "Opening URL: $url")
+        } catch (e: Exception) {
+            Log.e("NFC", "Error opening URL", e)
+        }
     }
 
-    fun toggleFlashlight(context: Context) {
-        // TODO: implement flashlight toggle (CameraManager)
-        Log.d("NFC", "Toggling flashlight")
-    }
+    fun toggleFlashlight(context: Context, enable: Boolean) {
+        try {
+            val cameraManager = context.getSystemService<CameraManager>()
+            val cameraId = cameraManager?.cameraIdList?.firstOrNull()
 
-    fun sendGoogleHomeCommand(device: String, command: String) {
-        // TODO: integrate with Google Home API (requires OAuth + Smart Home actions)
-        Log.d("NFC", "Sending command $command to $device")
+            if (cameraId != null) {
+                cameraManager.setTorchMode(cameraId, enable)
+                Log.d("NFC", "Flashlight: $enable")
+            }
+        } catch (e: Exception) {
+            Log.e("NFC", "Error toggling flashlight", e)
+        }
     }
 }

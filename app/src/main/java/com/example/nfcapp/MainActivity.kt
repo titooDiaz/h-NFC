@@ -8,12 +8,13 @@ import android.nfc.NdefMessage
 import android.nfc.NfcAdapter
 import android.nfc.Tag
 import android.os.Bundle
-import android.widget.Button
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.core.content.getSystemService
 import android.nfc.tech.Ndef
 import android.util.Log
+import com.google.android.material.card.MaterialCardView
+import com.google.android.material.button.MaterialButton
 
 class MainActivity : ComponentActivity() {
 
@@ -29,25 +30,31 @@ class MainActivity : ComponentActivity() {
         // Initialize NFC adapter
         nfcAdapter = NfcAdapter.getDefaultAdapter(this)
 
-        // Button to write "FLASH_ON"
-        findViewById<Button>(R.id.btnWriteFlashOn).setOnClickListener {
+        // Button to write "FLASH_ON" - NOW IT'S A CARD
+        findViewById<MaterialCardView>(R.id.btnWriteFlashOn).setOnClickListener {
             mode = "WRITE"
             dataToWrite = "FLASH_ON"
             Toast.makeText(this, "Tap an NFC tag to write FLASH_ON", Toast.LENGTH_SHORT).show()
         }
 
-        // Button to write "FLASH_OFF"
-        findViewById<Button>(R.id.btnWriteFlashOff).setOnClickListener {
+        // Button to write "FLASH_OFF" - NOW IT'S A CARD
+        findViewById<MaterialCardView>(R.id.btnWriteFlashOff).setOnClickListener {
             mode = "WRITE"
             dataToWrite = "FLASH_OFF"
             Toast.makeText(this, "Tap an NFC tag to write FLASH_OFF", Toast.LENGTH_SHORT).show()
         }
 
-        // Button to write a URL
-        findViewById<Button>(R.id.btnWriteUrl).setOnClickListener {
+        // Button to write a URL - NOW IT'S A CARD
+        findViewById<MaterialCardView>(R.id.btnWriteUrl).setOnClickListener {
             mode = "WRITE"
             dataToWrite = "https://google.com"
             Toast.makeText(this, "Tap an NFC tag to write URL", Toast.LENGTH_SHORT).show()
+        }
+
+        // Clear button - THIS ONE IS STILL A BUTTON
+        findViewById<MaterialButton>(R.id.btnClear).setOnClickListener {
+            Toast.makeText(this, "Clear mode activated", Toast.LENGTH_SHORT).show()
+            mode = "CLEAR"
         }
 
         // Handle NFC intent if the app was launched by NFC
@@ -180,6 +187,20 @@ class MainActivity : ComponentActivity() {
                 Toast.makeText(this, "Writable: $writable, Size: $size bytes", Toast.LENGTH_LONG).show()
             } else {
                 Toast.makeText(this, "This tag does not support NDEF", Toast.LENGTH_LONG).show()
+            }
+
+            // === CLEAR MODE ===
+            if (mode == "CLEAR") {
+                val success = NfcUtils.clearTag(tag)
+                if (success) {
+                    Toast.makeText(this, "✅ Tag cleared", Toast.LENGTH_LONG).show()
+                    Log.d("NFC", "Tag cleared successfully")
+                } else {
+                    Toast.makeText(this, "❌ Clear failed!", Toast.LENGTH_LONG).show()
+                    Log.e("NFC", "Tag clear failed")
+                }
+                mode = null
+                return
             }
 
             // === WRITE MODE ===

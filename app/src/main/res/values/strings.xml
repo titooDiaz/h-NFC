@@ -1,3 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">NFCApp</string>
+    <string name="app_name">NFC Writer</string>
+    <string name="app_title">NFC Writer</string>
+    <string name="app_subtitle">Bring your tag close to write</string>
+
+    <!-- Content descriptions -->
+    <string name="nfc_icon">NFC Icon</string>
+    <string name="flash_on">Flash On</string>
+    <string name="flash_off">Flash Off</string>
+    <string name="link">Link</string>
+    <string name="arrow">Arrow</string>
+
+    <!-- Flash ON card -->
+    <string name="flash_on_title">Flash ON</string>
+    <string name="flash_on_desc">Turn on flashlight</string>
+
+    <!-- Flash OFF card -->
+    <string name="flash_off_title">Flash OFF</string>
+    <string name="flash_off_desc">Turn off flashlight</string>
+
+    <!-- URL card -->
+    <string name="url_title">Open URL</string>
+    <string name="url_desc">Open web link</string>
+
+    <!-- Clear button -->
+    <string name="clear_tag">Clear Tag</string>
+
+    <!-- Status bar -->
+    <string name="status_ready">Ready to write</string>
 </resources>

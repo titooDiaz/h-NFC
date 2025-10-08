@@ -2,11 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_background">
 
-    <!-- Header con ícono NFC animado -->
+    <!-- Header with NFC icon -->
     <LinearLayout
         android:id="@+id/headerSection"
         android:layout_width="match_parent"
@@ -19,7 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Círculo con pulso para el ícono NFC -->
+        <!-- Circle with NFC icon -->
         <FrameLayout
             android:layout_width="120dp"
             android:layout_height="120dp"
@@ -31,14 +32,15 @@
                 android:layout_height="60dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_nfc"
-                android:tint="#FF6B35"
-                android:contentDescription="NFC Icon" />
+                app:tint="#FF6B35"
+                android:contentDescription="@string/nfc_icon"
+                tools:ignore="UseAppTint" />
         </FrameLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="NFC Writer"
+            android:text="@string/app_title"
             android:textSize="28sp"
             android:textStyle="bold"
             android:textColor="#1A1A1A"
@@ -48,237 +50,254 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Acerca tu tag para escribir"
+            android:text="@string/app_subtitle"
             android:textSize="14sp"
             android:textColor="#666666"
             android:layout_marginTop="8dp"
             android:alpha="0.8" />
     </LinearLayout>
 
-    <!-- Contenedor de tarjetas con acciones -->
-    <LinearLayout
-        android:id="@+id/cardsContainer"
+    <!-- Scrollable cards container -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="24dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
         app:layout_constraintTop_toBottomOf="@id/headerSection"
+        app:layout_constraintBottom_toTopOf="@id/statusBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Tarjeta: Flash ON -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/btnWriteFlashOn"
+        <LinearLayout
+            android:id="@+id/cardsContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="8dp"
-            app:strokeWidth="0dp"
-            android:backgroundTint="#FF6B35">
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:paddingBottom="80dp">
 
-            <LinearLayout
+            <!-- Card: Flash ON -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btnWriteFlashOn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="20dp"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/ic_flash_on"
-                    android:tint="#FFFFFF"
-                    android:contentDescription="Flash On" />
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="8dp"
+                app:strokeWidth="0dp"
+                app:cardBackgroundColor="#FF6B35">
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginStart="16dp">
+                    android:orientation="horizontal"
+                    android:padding="20dp"
+                    android:gravity="center_vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Flash ON"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="#FFFFFF" />
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_flash_on"
+                        app:tint="#FFFFFF"
+                        android:contentDescription="@string/flash_on"
+                        tools:ignore="UseAppTint" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Activar linterna"
-                        android:textSize="12sp"
-                        android:textColor="#FFFFFF"
-                        android:alpha="0.9"
-                        android:layout_marginTop="4dp" />
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginStart="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/flash_on_title"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="#FFFFFF" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/flash_on_desc"
+                            android:textSize="12sp"
+                            android:textColor="#FFFFFF"
+                            android:alpha="0.9"
+                            android:layout_marginTop="4dp" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_arrow_forward"
+                        app:tint="#FFFFFF"
+                        android:contentDescription="@string/arrow"
+                        tools:ignore="UseAppTint" />
                 </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_arrow_forward"
-                    android:tint="#FFFFFF"
-                    android:contentDescription="Arrow" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Tarjeta: Flash OFF -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/btnWriteFlashOff"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="4dp"
-            app:strokeColor="#FF6B35"
-            app:strokeWidth="2dp"
-            android:backgroundTint="#FFFFFF">
-
-            <LinearLayout
+            <!-- Card: Flash OFF -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btnWriteFlashOff"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="20dp"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/ic_flash_off"
-                    android:tint="#FF6B35"
-                    android:contentDescription="Flash Off" />
+                android:layout_marginTop="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="4dp"
+                app:strokeColor="#FF6B35"
+                app:strokeWidth="2dp"
+                app:cardBackgroundColor="#FFFFFF">
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginStart="16dp">
+                    android:orientation="horizontal"
+                    android:padding="20dp"
+                    android:gravity="center_vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Flash OFF"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="#1A1A1A" />
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_flash_off"
+                        app:tint="#FF6B35"
+                        android:contentDescription="@string/flash_off"
+                        tools:ignore="UseAppTint" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Desactivar linterna"
-                        android:textSize="12sp"
-                        android:textColor="#666666"
-                        android:layout_marginTop="4dp" />
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginStart="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/flash_off_title"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="#1A1A1A" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/flash_off_desc"
+                            android:textSize="12sp"
+                            android:textColor="#666666"
+                            android:layout_marginTop="4dp" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_arrow_forward"
+                        app:tint="#FF6B35"
+                        android:contentDescription="@string/arrow"
+                        tools:ignore="UseAppTint" />
                 </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_arrow_forward"
-                    android:tint="#FF6B35"
-                    android:contentDescription="Arrow" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Tarjeta: Open URL -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/btnWriteUrl"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="4dp"
-            app:strokeColor="#FF6B35"
-            app:strokeWidth="2dp"
-            android:backgroundTint="#FFFFFF">
-
-            <LinearLayout
+            <!-- Card: Open URL -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btnWriteUrl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="20dp"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/ic_link"
-                    android:tint="#FF6B35"
-                    android:contentDescription="Link" />
+                android:layout_marginTop="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="4dp"
+                app:strokeColor="#FF6B35"
+                app:strokeWidth="2dp"
+                app:cardBackgroundColor="#FFFFFF">
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginStart="16dp">
+                    android:orientation="horizontal"
+                    android:padding="20dp"
+                    android:gravity="center_vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Open URL"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="#1A1A1A" />
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_link"
+                        app:tint="#FF6B35"
+                        android:contentDescription="@string/link"
+                        tools:ignore="UseAppTint" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Abrir enlace web"
-                        android:textSize="12sp"
-                        android:textColor="#666666"
-                        android:layout_marginTop="4dp" />
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginStart="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/url_title"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="#1A1A1A" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/url_desc"
+                            android:textSize="12sp"
+                            android:textColor="#666666"
+                            android:layout_marginTop="4dp" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_arrow_forward"
+                        app:tint="#FF6B35"
+                        android:contentDescription="@string/arrow"
+                        tools:ignore="UseAppTint" />
                 </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_arrow_forward"
-                    android:tint="#FF6B35"
-                    android:contentDescription="Arrow" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+            <!-- Clear button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnClear"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="24dp"
+                android:text="@string/clear_tag"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#FF6B35"
+                app:cornerRadius="16dp"
+                app:strokeColor="#FF6B35"
+                app:strokeWidth="2dp"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                app:icon="@drawable/ic_delete"
+                app:iconTint="#FF6B35"
+                app:iconGravity="textStart"
+                app:backgroundTint="#FFFFFF" />
 
-        <!-- Botón Clear Tag -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnClear"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginTop="24dp"
-            android:text="Limpiar Tag"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="#FF6B35"
-            app:cornerRadius="16dp"
-            app:strokeColor="#FF6B35"
-            app:strokeWidth="2dp"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            app:icon="@drawable/ic_delete"
-            app:iconTint="#FF6B35"
-            app:iconGravity="textStart"
-            android:backgroundTint="#FFFFFF" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
-    </LinearLayout>
-
-    <!-- Indicador de estado en la parte inferior -->
+    <!-- Status bar at bottom -->
     <LinearLayout
+        android:id="@+id/statusBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
         android:padding="16dp"
+        android:background="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -293,7 +312,7 @@
             android:id="@+id/statusText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Listo para escribir"
+            android:text="@string/status_ready"
             android:textSize="12sp"
             android:textColor="#666666"
             android:layout_marginStart="8dp" />
