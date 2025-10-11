@@ -18,6 +18,7 @@
     <!-- Flash OFF card -->
     <string name="flash_off_title">Flash OFF</string>
     <string name="flash_off_desc">Turn off flashlight</string>
+    <string name="bulb_on">Ligth On</string>
 
     <!-- URL card -->
     <string name="url_title">Open URL</string>

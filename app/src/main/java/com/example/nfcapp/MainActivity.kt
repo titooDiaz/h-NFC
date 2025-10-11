@@ -57,6 +57,12 @@ class MainActivity : ComponentActivity() {
             mode = "CLEAR"
         }
 
+        // Button to turn on your bulb
+        findViewById<MaterialCardView>(R.id.btnTurnBulbOn).setOnClickListener {
+            Toast.makeText(this, "Encendiendo bombillo...", Toast.LENGTH_SHORT).show()
+            sendBulbCommand(true)
+        }
+
         // Handle NFC intent if the app was launched by NFC
         handleNfcIntent(intent)
     }
@@ -88,6 +94,16 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    // turn on the ligth
+    private fun sendBulbCommand(turnOn: Boolean) {
+        val deviceId = "ebca2a9934f770d5a2lplu"
+        val command = if (turnOn) "turnOn" else "turnOff"
+
+        Log.d("BULB", "Comando enviado: $command al dispositivo $deviceId")
+        Toast.makeText(this, "✅ Bombillo encendido", Toast.LENGTH_SHORT).show()
+    }
+
 
     private fun actOnNfcData(data: String) {
         Log.d("NFC", "Executing NFC action: $data")
